@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GET IP</title>
+</head>
+<body>
+    <div id="dom"></div>
+</body>
+</html>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+	// 下面这行和上面的script一起使用  获取真实IP地址
+    document.write(returnCitySN["cip"]+','+returnCitySN["cname"] + "真实IP地址")
+
+obj.a=document
+
+var xhr = new XMLHttpRequest();
+var time = 5 * 1000;//超时时间
+var timeout = false;
+var timer = setTimeout(function () {
+    timeout = true;
+    xhr.abort();//请求中止
+}, time);
+xhr.open(requestType, url, true);
+xhr.onreadystatechange = function () {
+    var response = xhr.responseText;
+    hoolai.Output.log('http url cb:' + url);
+    hoolai.Output.log('http readyState:' + xhr.readyState+'--'+xhr.status);
+    if (timeout) {
+        obj.onFail&&obj.onFail('time out');
+        return;
+    }
+    clearTimeout(timer);//取消等待的超时
+    if (xhr.readyState == 4 && (xhr.status >= 200 && xhr.status < 400)) {
+        var resJson = JSON.parse(response);
+        obj.onSuccess&&obj.onSuccess(resJson);
+    } else if(xhr.status < 200 || xhr.status >= 400){
+        obj.onFail&&obj.onFail(response);
+    }
+};
+</script>
